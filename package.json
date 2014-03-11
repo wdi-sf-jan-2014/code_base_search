@@ -1,0 +1,11 @@
+{
+  "name": "code_base_search",
+  "description": "code base search app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "underscore": "1.x",
+    "findit": "1.x",
+    "express": "3.x"
+  }
+}
