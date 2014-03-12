@@ -9,12 +9,16 @@ require('./suffix_tree.js');
 var tree = new SuffixTree();
 
 var start = function() {
-  fs.readFile('./test', 'utf8', function(err, data) {
-    if (err) {
-      return console.log(err);
-    }
+  fs.readdir('../contacts', function(err, files){
+    files.forEach(function(file) {
+      fs.readFile(file, 'utf8', function(err, data) {
+        if (err) {
+          return console.log(err);
+        }
 
-    _.each(data.split('\n'), tree.learn, tree);
+        _.each(data.split('\n'), tree.learn, tree);
+      });
+    });
   });
 };
 
