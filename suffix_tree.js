@@ -46,25 +46,35 @@ SuffixTree.prototype.add = function(suffix) {
       // everything to the left of the suffix's
       // split index is the current node's key
       var current_node_key = keys[i].slice(0,split_index);
+
+      // let's store a reference to the current node
+      var current_node = this[current_node_key];
+
       // everything to the right of the key's
       // split index is the left node's key 
       var left_node_key = keys[i].slice(split_index);
+
+      if (_.keys(current_node).length > 0) {
+        // if the current node has keys
+        // we need to have that node perform the add
+        return current_node.add(right_node_key); 
+      }
 
       // keep the node, we'll reuse it
       var old_node = this[keys[i]];
       // delete the key
       delete this[keys[i]];
-      // reattach the old node at the current node key
+      // current node becomes a new node
       this[current_node_key] = new SuffixTree(); 
-      // make the left node
+      // reattach the old node at the current node's left key
       this[current_node_key][left_node_key] = old_node;
-      // make the right node
+      // current node's right node becomes a new node
       this[current_node_key][right_node_key] = new SuffixTree();
       return this[current_node_key];
     }
     // update keys, because we may have inserted a new key
     keys=_.keys(this);
   }
+  // when all else fails make a new tree at this suffix
   this[suffix] = new SuffixTree();
-  return this;
 };
