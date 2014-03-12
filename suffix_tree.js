@@ -19,7 +19,8 @@ SuffixTree.prototype.learn = function(suffix) {
     // reference to the current suffix
     var current_suffix = delimited_suffix.slice(i); 
     
-    var node = this.add(current_suffix);
+    // add the suffix
+    this.add(current_suffix);
   }
 };
 
