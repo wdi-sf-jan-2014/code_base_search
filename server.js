@@ -14,7 +14,9 @@ var read_files = function(error, results) {
    _.filter(
     results,
     function(file) {
-      return _.indexOf([".js", ".rb"], path.extname(file)) !== -1;
+      return _.indexOf(
+        [".js", ".rb", ".html"], 
+        path.extname(file)) !== -1;
     }
   ).forEach(function(file) {
     fs.readFile(file, 'utf8', function(err, data) {
@@ -33,7 +35,7 @@ var walk = function(dir, done) {
     if (err) return done(err);
     var pending = list.length;
     if (!pending) return done(null, results);
-    list.forEach(function(file) {
+    _.each(list, function(file) {
       file = dir + '/' + file;
       fs.stat(file, function(err, stat) {
         if (stat && stat.isDirectory()) {
