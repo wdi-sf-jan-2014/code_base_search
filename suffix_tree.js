@@ -32,7 +32,7 @@ SuffixTree = (function() {
     return _.keys(
       _.omit(
         this,
-        ['discovered','suffixes','search','leaves','learn','add','is_leaf']
+        ['discovered','suffixes','search','leaves','learn','add','is_leaf','filename']
       )
     );
   };
@@ -63,7 +63,7 @@ SuffixTree = (function() {
     // of a suffix of s
     SuffixTree.results = [];
 
-    var node;
+    var node,suffix="";
    
     // go through the keys of the current node
     for(var i=0,keys=this.suffixes();i<keys.length;i++){
@@ -76,6 +76,9 @@ SuffixTree = (function() {
         if(keys[i].has(query)) {
           // if current edge (key) contains query
           node=this[keys[i]]; 
+          // if the current edge contains query, we are 
+          // on an edge leading to a leaf
+          suffix = keys[i];
         } else if (query.has(keys[i]) && !keys[i].has(SuffixTree.delimiter)) {
           // if query contains key, and key does not point to a leaf 
           // perform the search on the unmatched part of the string
@@ -87,18 +90,21 @@ SuffixTree = (function() {
     
     if (node instanceof SuffixTree) {
       // if we have a node, let's grab its leaves
-      node.leaves(SuffixTree.results);
+      // pass in SuffixTree.results and the suffix
+      node.leaves(SuffixTree.results,suffix);
     }
     return SuffixTree.results;
   };
 
-  SuffixTree.prototype.leaves = function(leaves) {
+  SuffixTree.prototype.leaves = function(leaves,_suffix) {
     _.each(this.suffixes(), function(suffix) {
-      this[suffix].leaves(leaves);
+      this[suffix].leaves(leaves,suffix);
     },this);
 
     if (this.is_leaf()) {
-      leaves.push(this);
+      leaves.push(_.extend(this,{ 
+        filename: SuffixTree.delimiter_filename_hash[_suffix.last(1)] 
+      }));
     }
 
     return leaves;

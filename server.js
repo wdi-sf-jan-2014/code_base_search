@@ -78,4 +78,3 @@ var server = app.listen(3000, function() {
 
 console.log("Reading in directory" + process.argv[2]);
 walk(process.argv[2], read_files);
-console.log("Ready!");
