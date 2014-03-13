@@ -1,5 +1,5 @@
 SuffixTree = (function() {
-  var delimiter = "$";
+  var delimiter = "𝄞";
 
   function SuffixTree() {
   }
