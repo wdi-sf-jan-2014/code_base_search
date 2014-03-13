@@ -4,6 +4,7 @@ var fs = require('fs');
 GLOBAL._ = require('underscore');
 
 var express = require('express');
+var symbols = require('unicode-3.1.0/properties/Any/symbols');
 var app = express();
 
 require('./lib/sugar-min.js');

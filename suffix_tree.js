@@ -17,6 +17,7 @@ SuffixTree = (function() {
     },
     set: function filename(f) {
       SuffixTree.__filename = f;
+      SuffixTree.__delimiter_filename_hash = SuffixTree.__delimiter_filename_hash || {};
       SuffixTree.__delimiter_filename_hash[SuffixTree.__delimiter] = f;
     }
   });
