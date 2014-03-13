@@ -26,6 +26,15 @@ Basically:
 * How can we use a suffix tree to pull in the files of a code base to be
   able to search for matches in the code base?
 
+#### Reading & Viewing
+
+* [Suffix Tree wikipedia
+  article](http://en.wikipedia.org/wiki/Suffix_tree)
+* [A really good slide deck about suffix
+  trees](http://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/suffixtrees.pdf)
+* [A video lesson with notes about suffix trees from the MIT Advanced Data
+Structures Course](http://courses.csail.mit.edu/6.851/spring12/lectures/L16.html)
+
 #### Set up your environment
 
 * Fork this project under your github account
