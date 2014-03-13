@@ -4,6 +4,53 @@ SuffixTree = function() {
 
 var delimiter = "$";
 
+// Match p on a path starting from root
+//  3 cases:
+//  a. query does not match: query does not occur in T
+//  b. query ends in a node of the tree. 
+//    all leaves below node are occurrences of query
+//  c. query ends in an edge of the tree
+//    all leaves below node pointed to by edge are occurrences of query
+//
+//  an edge is a key of the node
+SuffixTree.prototype.search = function(query) {
+  // first remove delimiter from the query
+  query = query.remove(delimiter);
+
+  if (query.length===0) {
+    // if query is empty return undefined
+    return void 0;
+  } 
+
+  // a query is a substring of s iff it's a prefix
+  // of a suffix of s
+  var results = [];
+
+  var node;
+ 
+  // go through the keys of the current node
+  for(var i=0,keys=_.keys(this);i<keys.length;i++){
+    if(keys[i][0]===query[0]){
+      // if any of the current keys starts with
+      // the first character of the query string
+      // we need to check if this key contains 
+      // the query. if so, we are on an exact match
+      // and don't need to traverse further
+      if(keys[i].has(query)) {
+        // if current edge (key) contains query
+        node=this[keys[i]]; 
+      } else if (query.has(keys[i]) && !keys[i].has(delimiter)) {
+        // if query contains key, and key does not point to a leaf 
+        // perform the search on the unmatched part of the string
+        // on the node pointed to by the key (traverse down)
+        node=this[keys[i]].search(query.remove(keys[i]));
+      }
+    } 
+  }
+  console.log(node);
+  //return results;
+};
+
 SuffixTree.prototype.learn = function(suffix) {
   // add a delimiter to the end of the line that isn't in
   // the alphabet of characters of code; we'll use the g clef

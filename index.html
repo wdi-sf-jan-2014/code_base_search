@@ -12,6 +12,7 @@
 
     <script src="jquery-2.1.0.min.js" type="text/javascript"></script>
     <script src="underscore-min.js" type="text/javascript"></script>
+    <script src="sugar-min.js" type="text/javascript"></script>
     <script src="suffix_tree.js" type="text/javascript"></script>
 
     <script>
@@ -22,7 +23,7 @@
 
       $('#search').submit(function(event) {
         event.preventDefault();
-        tree.search($('#query'));
+        console.log(tree.search($('#query').val()));
       })
     </script>
   </body>
