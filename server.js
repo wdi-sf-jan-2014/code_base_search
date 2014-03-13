@@ -26,6 +26,8 @@ var read_files = function(error, results) {
       }
 
       console.log(file);
+      SuffixTree.delimiter = symbols.pop();
+      SuffixTree.filename = file;
       _.each(data.split('\n'), tree.learn, tree);
     });
   });
@@ -73,5 +75,6 @@ var server = app.listen(3000, function() {
   console.log('Listening on port %d', server.address().port);
 });
 
-console.log(process.argv[2]);
+console.log("Reading in directory" + process.argv[2]);
 walk(process.argv[2], read_files);
+console.log("Ready!");

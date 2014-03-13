@@ -1,8 +1,31 @@
 SuffixTree = (function() {
-  var delimiter = "𝄞";
-
   function SuffixTree() {
   }
+
+  Object.defineProperty(SuffixTree, "delimiter", {
+    get: function delimiter() {
+      return SuffixTree.__delimiter || "$";
+    },
+    set: function delimiter(d) {
+      SuffixTree.__delimiter = d;
+    }
+  });
+
+  Object.defineProperty(SuffixTree, "filename", {
+    get: function filename() {
+      return SuffixTree.__filename || "";
+    },
+    set: function filename(f) {
+      SuffixTree.__filename = f;
+      SuffixTree.__delimiter_filename_hash[SuffixTree.__delimiter] = f;
+    }
+  });
+
+  Object.defineProperty(SuffixTree, "delimiter_filename_hash", {
+    get: function delimiter_filename_hash() {
+      return SuffixTree.__delimiter_filename_hash || {};
+    }
+  });
 
   SuffixTree.prototype.suffixes = function() {
     return _.keys(
@@ -28,7 +51,7 @@ SuffixTree = (function() {
   //  an edge is a key of the node
   SuffixTree.prototype.search = function(query) {
     // first remove delimiter from the query
-    query = query.remove(delimiter);
+    query = query.remove(SuffixTree.delimiter);
 
     if (query.length===0) {
       // if query is empty return undefined
@@ -52,7 +75,7 @@ SuffixTree = (function() {
         if(keys[i].has(query)) {
           // if current edge (key) contains query
           node=this[keys[i]]; 
-        } else if (query.has(keys[i]) && !keys[i].has(delimiter)) {
+        } else if (query.has(keys[i]) && !keys[i].has(SuffixTree.delimiter)) {
           // if query contains key, and key does not point to a leaf 
           // perform the search on the unmatched part of the string
           // on the node pointed to by the key (traverse down)
@@ -83,11 +106,11 @@ SuffixTree = (function() {
   SuffixTree.prototype.learn = function(suffix) {
     // add a delimiter to the end of the line that isn't in
     // the alphabet of characters of code; we'll use the g clef
-    var delimited_suffix = suffix + delimiter;
-    if (this[delimiter]===undefined) {
+    var delimited_suffix = suffix + SuffixTree.delimiter;
+    if (this[SuffixTree.delimiter]===undefined) {
       // if we don't have our first node
       // create our first node at the delimiter
-      this[delimiter] = new SuffixTree();
+      this[SuffixTree.delimiter] = new SuffixTree();
     }
     
     // iterate over characters of delimited suffix
