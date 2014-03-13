@@ -47,8 +47,35 @@ SuffixTree.prototype.search = function(query) {
       }
     } 
   }
-  console.log(node);
-  //return results;
+  
+  if (node) {
+    // if we have a node, let's grab its leaves
+    return node.leaves();   
+  }
+};
+
+SuffixTree.prototype.leaves = function() {
+  // this is basically a non-recursive dfs
+  // implementation using a stack to keep track of 
+  // visited nodes
+  var stack=[],matches=[];
+  // push the root onto the stack
+  stack.push(this);
+  // while we have nodes to visit
+  while (stack.length>0) {
+    // pop the first node off the stack 
+    var node=stack.pop();
+    if (node&&node.discovered===undefined) {
+      node.discovered=true;
+      for(var i=0,keys=_.keys(node);i<keys.length;i++) {
+        stack.push(this[keys[i]]);
+        if(keys[i].has(delimiter)){
+          matches.push(this[keys[i]]);
+        }
+      }
+    }
+  } 
+  return matches;
 };
 
 SuffixTree.prototype.learn = function(suffix) {

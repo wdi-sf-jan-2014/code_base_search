@@ -6,6 +6,7 @@ GLOBAL._ = require('underscore');
 var express = require('express');
 var app = express();
 
+require('./sugar-min.js');
 require('./suffix_tree.js');
 
 var tree = new SuffixTree();
@@ -15,7 +16,7 @@ var read_files = function(error, results) {
     results,
     function(file) {
       return _.indexOf(
-        [".js", ".rb", ".html"], 
+        [".js", ".rb"], 
         path.extname(file)) !== -1;
     }
   ).forEach(function(file) {
@@ -61,6 +62,10 @@ app.get('/learn', function(req, res) {
   tree = new SuffixTree();
   walk('../contacts', read_files);
   res.send(tree);
+});
+
+app.get('/search/:q', function(req, res) {
+  res.send(tree.search(req.params.q));
 });
 
 var server = app.listen(3000, function() {
