@@ -4,7 +4,7 @@ var fs = require('fs');
 GLOBAL._ = require('underscore');
 
 var express = require('express');
-var symbols = require('unicode-3.1.0/properties/Any/symbols');
+var symbols = require('unicode-3.1.0/blocks/Cyrillic/symbols');
 var app = express();
 
 require('./lib/sugar-min.js');
@@ -26,7 +26,6 @@ var read_files = function(error, results) {
         return console.log(err);
       }
 
-      console.log(file);
       SuffixTree.delimiter = symbols.pop();
       SuffixTree.filename = file;
       _.each(data.split('\n'), tree.learn, tree);

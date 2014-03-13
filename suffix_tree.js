@@ -11,20 +11,20 @@ SuffixTree = (function() {
     }
   });
 
+  Object.defineProperty(SuffixTree, "delimiter_filename_hash", {
+    get: function delimiter_filename_hash() {
+      SuffixTree.__dfh = SuffixTree.__dfh || {}; 
+      return SuffixTree.__dfh;
+    }
+  });
+
   Object.defineProperty(SuffixTree, "filename", {
     get: function filename() {
       return SuffixTree.__filename || "";
     },
     set: function filename(f) {
       SuffixTree.__filename = f;
-      SuffixTree.__delimiter_filename_hash = SuffixTree.__delimiter_filename_hash || {};
-      SuffixTree.__delimiter_filename_hash[SuffixTree.__delimiter] = f;
-    }
-  });
-
-  Object.defineProperty(SuffixTree, "delimiter_filename_hash", {
-    get: function delimiter_filename_hash() {
-      return SuffixTree.__delimiter_filename_hash || {};
+      SuffixTree.delimiter_filename_hash[SuffixTree.delimiter] = f;
     }
   });
 
