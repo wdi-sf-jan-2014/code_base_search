@@ -6,7 +6,7 @@ GLOBAL._ = require('underscore');
 var express = require('express');
 var app = express();
 
-require('./sugar-min.js');
+require('./lib/sugar-min.js');
 require('./suffix_tree.js');
 
 var tree = new SuffixTree();
