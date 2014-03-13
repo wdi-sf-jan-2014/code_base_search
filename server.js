@@ -25,6 +25,7 @@ var read_files = function(error, results) {
         return console.log(err);
       }
 
+      console.log(file);
       _.each(data.split('\n'), tree.learn, tree);
     });
   });
@@ -72,4 +73,5 @@ var server = app.listen(3000, function() {
   console.log('Listening on port %d', server.address().port);
 });
 
-walk('../contacts', read_files);
+console.log(process.argv[2]);
+walk(process.argv[2], read_files);

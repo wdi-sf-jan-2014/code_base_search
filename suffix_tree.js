@@ -4,6 +4,19 @@ SuffixTree = (function() {
   function SuffixTree() {
   }
 
+  SuffixTree.prototype.suffixes = function() {
+    return _.keys(
+      _.omit(
+        this,
+        ['discovered','suffixes','search','leaves','learn','add','is_leaf']
+      )
+    );
+  };
+
+  SuffixTree.prototype.is_leaf = function() {
+    return this.suffixes().length === 0;
+  };
+
   // Match p on a path starting from root
   //  3 cases:
   //  a. query does not match: query does not occur in T
@@ -24,12 +37,12 @@ SuffixTree = (function() {
 
     // a query is a substring of s iff it's a prefix
     // of a suffix of s
-    var results = [];
+    SuffixTree.results = [];
 
     var node;
    
     // go through the keys of the current node
-    for(var i=0,keys=_.keys(this);i<keys.length;i++){
+    for(var i=0,keys=this.suffixes();i<keys.length;i++){
       if(keys[i][0]===query[0]){
         // if any of the current keys starts with
         // the first character of the query string
@@ -50,39 +63,20 @@ SuffixTree = (function() {
     
     if (node instanceof SuffixTree) {
       // if we have a node, let's grab its leaves
-      return node.leaves();
+      node.leaves(SuffixTree.results);
     }
+    return SuffixTree.results;
   };
 
-  SuffixTree.prototype.leaves = function() {
-    // this is basically a non-recursive dfs
-    // implementation using a stack to keep track of 
-    // visited nodes. discovered is a hash that
-    // stores discovered nodes, since we should
-    // not mark our own nodes with additional keys
-    var stack=[],leaves=[],discovered={};
-    // push the root onto the stack
-    stack.push(this);
-    // while we have nodes to visit
-    while (stack.length>0) {
-      // pop the first node off the stack 
-      var node=stack.pop();
-      if(_.keys(node).length===0){
-        leaves.push(node);
-      }
-      if (node&&discovered[node]===undefined) {
-        discovered[node]=true;
-        for(var i=0,keys=_.keys(node);i<keys.length;i++) {
-          var node_at_edge = this[keys[i]];
-          if(_.keys(node_at_edge).length===0) {
-            // if the node does not have outgoing 
-            // keys, then it's a leaf node
-            leaves.push(node_at_edge);
-          }
-          stack.push(node_at_edge);
-        }
-      }
-    } 
+  SuffixTree.prototype.leaves = function(leaves) {
+    _.each(this.suffixes(), function(suffix) {
+      this[suffix].leaves(leaves);
+    },this);
+
+    if (this.is_leaf()) {
+      leaves.push(this);
+    }
+
     return leaves;
   };
 
@@ -107,7 +101,7 @@ SuffixTree = (function() {
   };
 
   SuffixTree.prototype.add = function(suffix) {
-    var keys = _.keys(this);
+    var keys = this.suffixes();
     // iterate over the keys
     for(var i=0;i<keys.length;i++) {
       if(keys[i][0]===suffix[0]) {
@@ -137,7 +131,7 @@ SuffixTree = (function() {
         // split index is the left node's key 
         var left_node_key = keys[i].slice(split_index);
 
-        if (_.keys(current_node).length > 0) {
+        if (current_node&&current_node.suffixes().length > 0) {
           // if the current node has keys
           // we need to have that node perform the add
           return current_node.add(right_node_key); 
@@ -156,7 +150,7 @@ SuffixTree = (function() {
         return this[current_node_key];
       }
       // update keys, because we may have inserted a new key
-      keys=_.keys(this);
+      keys=this.suffixes();
     }
     // when all else fails make a new tree at this suffix
     this[suffix] = new SuffixTree();
