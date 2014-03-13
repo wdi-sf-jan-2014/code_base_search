@@ -48,34 +48,42 @@ SuffixTree.prototype.search = function(query) {
     } 
   }
   
-  if (node) {
+  if (node instanceof SuffixTree) {
     // if we have a node, let's grab its leaves
-    return node.leaves();   
+    return node.leaves();
   }
 };
 
 SuffixTree.prototype.leaves = function() {
   // this is basically a non-recursive dfs
   // implementation using a stack to keep track of 
-  // visited nodes
-  var stack=[],matches=[];
+  // visited nodes. discovered is a hash that
+  // stores discovered nodes, since we should
+  // not mark our own nodes with additional keys
+  var stack=[],leaves=[],discovered={};
   // push the root onto the stack
   stack.push(this);
   // while we have nodes to visit
   while (stack.length>0) {
     // pop the first node off the stack 
     var node=stack.pop();
-    if (node&&node.discovered===undefined) {
-      node.discovered=true;
+    if(_.keys(node).length===0){
+      leaves.push(node);
+    }
+    if (node&&discovered[node]===undefined) {
+      discovered[node]=true;
       for(var i=0,keys=_.keys(node);i<keys.length;i++) {
-        stack.push(this[keys[i]]);
-        if(keys[i].has(delimiter)){
-          matches.push(this[keys[i]]);
+        var node_at_edge = this[keys[i]];
+        if(_.keys(node_at_edge).length===0) {
+          // if the node does not have outgoing 
+          // keys, then it's a leaf node
+          leaves.push(node_at_edge);
         }
+        stack.push(node_at_edge);
       }
     }
   } 
-  return matches;
+  return leaves;
 };
 
 SuffixTree.prototype.learn = function(suffix) {
