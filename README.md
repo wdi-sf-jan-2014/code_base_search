@@ -6,6 +6,16 @@ framework](http://expressjs.com/), and either backbonejs or angularjs
 for your mvc framework; if you prefer to not use a frontend mvc, that's
 fine too.
 
+When you've finished, you'll be able to run:
+`node server.js some/directory/to/index/in/a/suffix/tree` to load a code
+base into a suffix tree.
+
+You'll then be able to search your tree with:
+`http://localhost:3000/search/substring_in_the_codebase`
+
+Basically:
+### Trie Hard, with a Vengeance.
+
 ### Before you write a single line of code: 
 
 #### Understand suffix trees
