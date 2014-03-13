@@ -3,6 +3,8 @@ SuffixTree = (function() {
   }
 
   Object.defineProperty(SuffixTree, "delimiter", {
+    // the property created here is used in server.js
+    // it's used for delimiting lines of input
     get: function delimiter() {
       return SuffixTree.__delimiter || "$";
     },
@@ -12,6 +14,11 @@ SuffixTree = (function() {
   });
 
   Object.defineProperty(SuffixTree, "filename", {
+    // the property created here is used in server.js
+    // it's used for keeping track of the filename on which
+    // we are operating. it creates and intializes a hash
+    // which you may use to set filenames on the leaves
+    // once you get to that point
     get: function filename() {
       return SuffixTree.__filename || "";
     },
@@ -28,6 +35,9 @@ SuffixTree = (function() {
     }
   });
 
+  // use this to return the suffixes of a given node
+  // this is a utility function, that omits other functions
+  // because we are using the keys of the js object as suffix identifiers
   SuffixTree.prototype.suffixes = function() {
     return _.keys(
       _.omit(
@@ -37,6 +47,8 @@ SuffixTree = (function() {
     );
   };
 
+  // this utility function is going to return true
+  // when the current node has no suffixes
   SuffixTree.prototype.is_leaf = function() {
     return this.suffixes().length === 0;
   };
