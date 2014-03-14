@@ -20,6 +20,10 @@ describe("SuffixTree", function() {
       t.learn('banana');
     });
 
+    it("contains the delimiter node", function() {
+      expect(t.$).toEqual(jasmine.any(SuffixTree));
+    });
+
     it("invokes the add function for each delimited suffix of the word",
       function() {
         expect(
