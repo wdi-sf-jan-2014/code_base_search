@@ -20,6 +20,10 @@ describe("SuffixTree", function() {
       t.learn('banana');
     });
 
+    it("contains the delimiter node", function() {
+      expect(t.$).toEqual(jasmine.any(SuffixTree));
+    });
+
     it("invokes the add function for each delimited suffix of the word",
       function() {
         expect(
@@ -86,6 +90,66 @@ describe("SuffixTree", function() {
       expect(t.a.na.$).toEqual(jasmine.any(SuffixTree));
       expect(t.a.na.na$).toEqual(jasmine.any(SuffixTree));
       expect(t.banana$).toEqual(jasmine.any(SuffixTree));
+    });
+  });
+
+  describe("Searching for substrings of banana", function() {
+    beforeEach(function() {
+      t.learn('banana');
+    });
+
+    describe("searching for 'a'", function() {
+      it("should find the leaves of t.a", function() {
+        expect(t.search('a')).toEqual([t.a.$, t.a.na.$, t.a.na.na$]);
+      });
+    });
+
+    describe("searching for 'b'", function() {
+      it("should find the leaves of t.banana$", function() {
+        expect(t.search('b')).toEqual([t.banana$]);
+      });
+    });
+
+    describe("searching for 'n'", function() {
+      it("should find the leaves of t.na", function() {
+        expect(t.search('n')).toEqual([t.na.$, t.na.na$]);
+      });
+    });
+
+    //  expect(t.a.$).toEqual(jasmine.any(SuffixTree));
+    //  expect(t.na.$).toEqual(jasmine.any(SuffixTree));
+    //  expect(t.na.na$).toEqual(jasmine.any(SuffixTree));
+    //  expect(t.a.na.$).toEqual(jasmine.any(SuffixTree));
+    //  expect(t.a.na.na$).toEqual(jasmine.any(SuffixTree));
+    //  expect(t.banana$).toEqual(jasmine.any(SuffixTree));
+    describe("searching for 'na'", function() {
+      it("should find the leaves of t.na", function() {
+        expect(t.search('na')).toEqual([t.na.$, t.na.na$]);
+      });
+    });
+
+    describe("searching for 'ana'", function() {
+      it("should find the leaves of t.a.na", function() {
+        expect(t.search('ana')).toEqual([t.a.na.$, t.a.na.na$]);
+      });
+    });
+
+    describe("searching for 'nana'", function() {
+      it("should find the leaves of t.na.na", function() {
+        expect(t.search('nana')).toEqual([t.na.na$]);
+      });
+    });
+
+    describe("searching for 'anana'", function() {
+      it("should find the leaves of t.a.na.na", function() {
+        expect(t.search('anana')).toEqual([t.a.na.na$]);
+      });
+    });
+
+    describe("searching for 'banana'", function() {
+      it("should find the leaves of t.banana", function() {
+        expect(t.search('banana')).toEqual([t.banana$]);
+      });
     });
   });
 });
