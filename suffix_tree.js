@@ -3,6 +3,8 @@ SuffixTree = (function() {
   }
 
   Object.defineProperty(SuffixTree, "delimiter", {
+    // the property created here is used in server.js
+    // it's used for delimiting lines of input
     get: function delimiter() {
       return SuffixTree.__delimiter || "$";
     },
@@ -19,6 +21,11 @@ SuffixTree = (function() {
   });
 
   Object.defineProperty(SuffixTree, "filename", {
+    // the property created here is used in server.js
+    // it's used for keeping track of the filename on which
+    // we are operating. it creates and intializes a hash
+    // which you may use to set filenames on the leaves
+    // once you get to that point
     get: function filename() {
       return SuffixTree.__filename || "";
     },
@@ -28,6 +35,9 @@ SuffixTree = (function() {
     }
   });
 
+  // use this to return the suffixes of a given node
+  // this is a utility function, that omits other functions
+  // because we are using the keys of the js object as suffix identifiers
   SuffixTree.prototype.suffixes = function() {
     return _.keys(
       _.omit(
@@ -37,6 +47,8 @@ SuffixTree = (function() {
     );
   };
 
+  // this utility function is going to return true
+  // when the current node has no suffixes
   SuffixTree.prototype.is_leaf = function() {
     return this.suffixes().length === 0;
   };
@@ -96,6 +108,10 @@ SuffixTree = (function() {
     return SuffixTree.results;
   };
 
+  // Return the leaf nodes for the sub tree
+  // on which this function is called
+  // you should consider implementing a depth
+  // first traversal to the leaf nodes
   SuffixTree.prototype.leaves = function(leaves,_suffix) {
     _.each(this.suffixes(), function(suffix) {
       this[suffix].leaves(leaves,suffix);
@@ -110,6 +126,15 @@ SuffixTree = (function() {
     return leaves;
   };
 
+  // This should be the entry point into the suffix
+  // tree's learning abilities. This function is called
+  // from server.js. Find where it's called in server.js.
+  // Basically, in server.js, we are calling this function
+  // for each line in an input file
+
+  // However, this should work just as easily for a simple
+  // word, like banana :)
+  // the meat and potatoes are cooked by SuffixTree.prototype.add
   SuffixTree.prototype.learn = function(suffix) {
     // add a delimiter to the end of the line that isn't in
     // the alphabet of characters of code; we'll use the g clef
@@ -130,6 +155,7 @@ SuffixTree = (function() {
     }
   };
 
+  // this is the meat and potatoes function that cooks this excellent meal
   SuffixTree.prototype.add = function(suffix) {
     var keys = this.suffixes();
     // iterate over the keys
@@ -185,5 +211,7 @@ SuffixTree = (function() {
     // when all else fails make a new tree at this suffix
     this[suffix] = new SuffixTree();
   };
+  
+  // this just returns the SuffixTree to the outside world for usage
   return SuffixTree;
 })();
