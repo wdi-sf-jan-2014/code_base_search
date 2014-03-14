@@ -20,10 +20,6 @@ describe("SuffixTree", function() {
       t.learn('banana');
     });
 
-    it("contains the delimiter node", function() {
-      expect(t.$).toEqual(jasmine.any(SuffixTree));
-    });
-
     it("invokes the add function for each delimited suffix of the word",
       function() {
         expect(
@@ -93,6 +89,13 @@ describe("SuffixTree", function() {
     });
   });
 
+  it("should construct the tree without anything extra", function() {
+    t.learn('banana');
+    expect(JSON.stringify(t)).toEqual(
+      '{"$":{},"a":{"$":{},"na":{"$":{},"na$":{}}},"na":{"$":{},"na$":{}},"banana$":{}}'
+    );
+  });
+
   describe("Searching for substrings of banana", function() {
     beforeEach(function() {
       t.learn('banana');
@@ -116,12 +119,6 @@ describe("SuffixTree", function() {
       });
     });
 
-    //  expect(t.a.$).toEqual(jasmine.any(SuffixTree));
-    //  expect(t.na.$).toEqual(jasmine.any(SuffixTree));
-    //  expect(t.na.na$).toEqual(jasmine.any(SuffixTree));
-    //  expect(t.a.na.$).toEqual(jasmine.any(SuffixTree));
-    //  expect(t.a.na.na$).toEqual(jasmine.any(SuffixTree));
-    //  expect(t.banana$).toEqual(jasmine.any(SuffixTree));
     describe("searching for 'na'", function() {
       it("should find the leaves of t.na", function() {
         expect(t.search('na')).toEqual([t.na.$, t.na.na$]);
