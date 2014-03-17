@@ -152,7 +152,9 @@ SuffixTree = (function() {
       this.add(suffix);
     }
   };
-  // this function returns the key that starts with the same letter as the word or the number 0 if there are none
+  // Function used to check if the first letter of the word passed as an argument and the first letter of a key match.
+  // If there is a match, it returns the key that starts with the same letter as the word
+  //else, it returns null
   SuffixTree.prototype.matching_key = function(word) {
     var suffixes = this.suffixes();
     for (var i = 0; i < suffixes.length; i++) {
@@ -163,7 +165,9 @@ SuffixTree = (function() {
     }
     return null;
   };
-  // method to count how many letters two words start with in common
+  // method to count how many letters word1 and word2 have in common, starting from the 
+  //beginning, until they don't match.  I call this function when the first letters match match already. 
+  //when all the letters of a word match and the legnth is different(like band and bandana), I return the minimum length of the two words
   var num_begin_match = function(word1, word2) {
     for (var i = 0; i < word1.length && i < word2.length; i++) {
       if (word1[i] !== word2[i]) {
@@ -173,9 +177,6 @@ SuffixTree = (function() {
     return Math.min(word1.length, word2.length);
   };
 
-  var add = function(a, b) {
-    return a + b;
-  };
 
   // this is the meat and potatoes function that cooks this excellent meal
   SuffixTree.prototype.add = function(suffix) {
@@ -187,8 +188,8 @@ SuffixTree = (function() {
     if (key === null) {
       this[suffix] = new SuffixTree();
     } else if (key !== '$') {
-      //we are in this part of the loop when there is already a key starting with the same letter as suffic
-      //key is the key of the node
+      //we are in this part of the loop when there is already a key starting with the same letter as suffix
+      //key is the key of the node that match
       var num_match = num_begin_match(suffix, key);
 
       var new_key = suffix.substring(0, num_match);
