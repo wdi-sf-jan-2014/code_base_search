@@ -20,30 +20,43 @@ describe("SuffixTree", function() {
       t.learn('banana');
     });
 
+    // it("contains the delimiter node", function() {
+    //   expect(t.$).toEqual(jasmine.any(SuffixTree));
+    // });
+
     it("invokes the add function for each delimited suffix of the word",
       function() {
         expect(
           t.add.calls.map(
-            function(spy_call){return spy_call.args;}
+            function(spy_call) {
+              return spy_call.args;
+            }
           )
         ).toEqual(
-          [['a$'], ['na$'], ['ana$'], ['nana$'], ['anana$'], ['banana$']]
+          [
+            ['a$'],
+            ['na$'],
+            ['ana$'],
+            ['nana$'],
+            ['anana$'],
+            ['banana$']
+          ]
         );
       }
     );
   });
 
-  describe("learning banana suffix by suffix",function() {
-    it("learns a",function() {
+  describe("learning banana suffix by suffix", function() {
+    it("learns a", function() {
       t.learn('a');
       expect(t.a$).toEqual(jasmine.any(SuffixTree));
     });
-    it("learns na after a",function() {
+    it("learns na after a", function() {
       t.learn('a');
       t.learn('na');
       expect(t.na$).toEqual(jasmine.any(SuffixTree));
     });
-    it("learns ana after na",function() {
+    it("learns ana after na", function() {
       t.learn('a');
       t.learn('na');
       t.learn('ana');
@@ -51,7 +64,7 @@ describe("SuffixTree", function() {
       expect(t.na$).toEqual(jasmine.any(SuffixTree));
       expect(t.a.na$).toEqual(jasmine.any(SuffixTree));
     });
-    it("learns nana after ana",function() {
+    it("learns nana after ana", function() {
       t.learn('a');
       t.learn('na');
       t.learn('ana');
@@ -61,7 +74,7 @@ describe("SuffixTree", function() {
       expect(t.na.$).toEqual(jasmine.any(SuffixTree));
       expect(t.na.na$).toEqual(jasmine.any(SuffixTree));
     });
-    it("learns anana after nana",function() {
+    it("learns anana after nana", function() {
       t.learn('a');
       t.learn('na');
       t.learn('ana');
@@ -73,7 +86,7 @@ describe("SuffixTree", function() {
       expect(t.a.na.$).toEqual(jasmine.any(SuffixTree));
       expect(t.a.na.na$).toEqual(jasmine.any(SuffixTree));
     });
-    it("learns banana after anana",function() {
+    it("learns banana after anana", function() {
       t.learn('a');
       t.learn('na');
       t.learn('ana');
